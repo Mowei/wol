@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 source_url="https://raw.githubusercontent.com/Mowei/wol/main/list"
 content=$(curl -k -s $source_url)
