@@ -1,0 +1,10 @@
+[
+  {
+    "ExecutionName": "ON",
+	"ExecutionTime": "NO"
+  },
+  {
+    "ExecutionName": "OFF",
+	"ExecutionTime": "YES"
+  }
+]
