@@ -1,13 +1,49 @@
 #!/bin/sh
 
-source_url="https://raw.githubusercontent.com/Mowei/wol/main/list"
-content=$(curl -k -s $source_url)
+# --- [1] 設定區 ---
+TOKEN="你的_GITHUB_TOKEN"
+REPO="Mowei/wol"
+FILE_PATH="list"
+API_URL="https://github.com"
 
-if [ -n "$content" ]; then
-  date=$(echo $content | cut -d',' -f1)
-  mac=$(echo $content | cut -d',' -f2)
-  if [ "$date" == "$(date +%Y/%m/%d)" ]; then
-    curl -k -X GET "https://127.0.0.1:8443/wol_action.asp?dstmac=$mac"
-  fi
+MAC_MSI="11:22:33:44:55:66"
+MAC_WORK="AA:BB:CC:DD:EE:FF"
+
+response=$(curl -s -H "Authorization: token $TOKEN" "$API_URL")
+encoded_content=$(echo "$response" | grep '"content":' | cut -d'"' -f4 | tr -d '\n')
+sha=$(echo "$response" | grep '"sha":' | cut -d'"' -f4)
+
+if [ -z "$encoded_content" ]; then
+    exit 1
 fi
-EOF
+
+content=$(echo "$encoded_content" | base64 -d)
+
+if echo "$content" | grep -q " 1"; then    
+    echo "$content" | while read -r name status; do
+        if [ "$status" = "1" ]; then
+            case "$name" in
+                "MSI")  mac="$MAC_MSI" ;;
+                "WORK") mac="$MAC_WORK" ;;
+                *)      mac="$name" ;;
+            esac
+
+            if [ -n "$mac" ]; then
+                echo "正在喚醒 $name ($mac)..."
+                curl -k -s -X GET "https://127.0.0.1:8443/wol_action.asp?dstmac=$mac" > /dev/null
+            fi
+        fi
+    done
+
+    new_content=$(echo "$content" | sed 's/ 1/ 0/g')
+    new_encoded=$(echo -n "$new_content" | base64 | tr -d '\n')
+
+    curl -s -X PUT -H "Authorization: token $TOKEN" \
+         -H "Accept: application/vnd.github.v3+json" \
+         "$API_URL" \
+         -d "{
+           \"message\": \"WOL logic: Processed all tasks\",
+           \"content\": \"$new_encoded\",
+           \"sha\": \"$sha\"
+         }" > /dev/null
+fi
