@@ -29,7 +29,6 @@ if echo "$content" | grep -q " 1"; then
             esac
 
             if [ -n "$mac" ]; then
-                echo "正在喚醒 $name ($mac)..."
                 curl -k -s -X GET "https://127.0.0.1:8443/wol_action.asp?dstmac=$mac" > /dev/null
             fi
         fi
