@@ -3,10 +3,10 @@
 TOKEN="GITHUB_TOKEN"
 REPO="Mowei/wol"
 FILE_PATH="list"
-API_URL="https://github.com"
+API_URL="https://api.github.com/repo/$REPO/contents/$FILE_PATH"
 
-MAC_MSI="11:22:33:44:55:66"
-MAC_WORK="AA:BB:CC:DD:EE:FF"
+MAC_MSI="30:9C:23:14:0D:FF"
+MAC_WORK="3C:7C:3F:F2:69:4E"
 
 response=$(curl -s -H "Authorization: token $TOKEN" "$API_URL")
 encoded_content=$(echo "$response" | grep '"content":' | cut -d'"' -f4 | tr -d '\n')
