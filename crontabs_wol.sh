@@ -3,7 +3,7 @@
 TOKEN="GITHUB_TOKEN"
 REPO="Mowei/wol"
 FILE_PATH="list"
-API_URL="https://api.github.com/repo/$REPO/contents/$FILE_PATH"
+API_URL="https://api.github.com/repos/$REPO/contents/$FILE_PATH"
 
 MAC_MSI="30:9C:23:14:0D:FF"
 MAC_WORK="3C:7C:3F:F2:69:4E"
