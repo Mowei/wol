@@ -1,7 +1,6 @@
 #!/bin/sh
 
-# --- [1] 設定區 ---
-TOKEN="你的_GITHUB_TOKEN"
+TOKEN="GITHUB_TOKEN"
 REPO="Mowei/wol"
 FILE_PATH="list"
 API_URL="https://github.com"
