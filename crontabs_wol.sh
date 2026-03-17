@@ -8,7 +8,7 @@ API_URL="https://api.github.com/repo/$REPO/contents/$FILE_PATH"
 MAC_MSI="30:9C:23:14:0D:FF"
 MAC_WORK="3C:7C:3F:F2:69:4E"
 
-response=$(curl -s -H "Authorization: token $TOKEN" "$API_URL")
+response=$(curl -s -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" "$API_URL")
 encoded_content=$(echo "$response" | grep '"content":' | cut -d'"' -f4 | tr -d '\n')
 sha=$(echo "$response" | grep '"sha":' | cut -d'"' -f4)
 
@@ -36,8 +36,9 @@ if echo "$content" | grep -q " 1"; then
     new_content=$(echo "$content" | sed 's/ 1/ 0/g')
     new_encoded=$(echo -n "$new_content" | base64 | tr -d '\n')
 
-    curl -s -X PUT -H "Authorization: token $TOKEN" \
-         -H "Accept: application/vnd.github.v3+json" \
+    curl -s -X PUT -H "Authorization: Bearer $TOKEN" \
+         -H "Accept: application/vnd.github+json" \
+         -H "X-GitHub-Api-Version: 2022-11-28" \
          "$API_URL" \
          -d "{
            \"message\": \"WOL logic: Processed all tasks\",
