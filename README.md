@@ -3,4 +3,4 @@ READ ME
 開機改1   
 MSI 0
    
-WORK 1
+WORK 0
